@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { requestGetAllCategories } from "../../../actions/general";
 import { OptionsAccount } from "./OptionsAccount";
 import { OptionsLogged } from "./OptionsLogged";
 
 export const Header = () => {
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.car);
   const [logged, setLogged] = useState(false);
-  const [navMenu, setNavMenu] = useState(false);
+
+  useEffect(() => {
+    dispatch(requestGetAllCategories());
+  }, []);
 
   return (
     <header className="header clearfix">
@@ -28,49 +35,7 @@ export const Header = () => {
               />
             </Link>
           </div>
-          {/* <div className="select_location">
-            <div className="ui inline dropdown loc-title">
-              <div className="text">
-                <i className="uil uil-location-point"></i>
-                Gurugram
-              </div>
-              <i className="uil uil-angle-down icon__14"></i>
-              <div className="menu dropdown_loc">
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  Gurugram
-                </div>
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  New Delhi
-                </div>
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  Bangaluru
-                </div>
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  Mumbai
-                </div>
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  Hyderabad
-                </div>
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  Kolkata
-                </div>
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  Ludhiana
-                </div>
-                <div className="item channel_item">
-                  <i className="uil uil-location-point"></i>
-                  Chandigrah
-                </div>
-              </div>
-            </div>
-          </div> */}
+
           <div className="search120">
             <div className="ui search">
               <div className="ui left icon input swdh10">
@@ -199,7 +164,7 @@ export const Header = () => {
             >
               <i className="uil uil-shopping-cart-alt"></i>
               <span>Carrito</span>
-              <ins>2</ins>
+              <ins>{products.length === 0 ? "" : products.length}</ins>
               <i className="uil uil-angle-down"></i>
             </a>
           </div>

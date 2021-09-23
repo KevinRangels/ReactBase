@@ -1,6 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { transformTextUppercase } from "../../helpers/transformText";
 
 export const FiltersSection = () => {
+  const { categories } = useSelector((state) => state.general);
+
   return (
     <div className="bs-canvas bs-canvas-right position-fixed bg-cart h-100">
       <div className="bs-canvas-header side-cart-header p-3 ">
@@ -25,50 +29,17 @@ export const FiltersSection = () => {
                   <input type="radio" id="c1" name="category1" />
                   <label for="c1">All</label>
                 </li>
-                <li>
-                  <input type="radio" id="c2" name="category1" checked />
-                  <label for="c2">Vegetables & Fruits</label>
-                </li>
-                <li>
-                  <input type="radio" id="c3" name="category1" />
-                  <label for="c3">Grocery & Staples</label>
-                </li>
-                <li>
-                  <input type="radio" id="c4" name="category1" />
-                  <label for="c4">Dairy & Eggs</label>
-                </li>
-                <li>
-                  <input type="radio" id="c5" name="category1" />
-                  <label for="c5">Beverages</label>
-                </li>
-                <li>
-                  <input type="radio" id="c6" name="category1" />
-                  <label for="c6">Snacks</label>
-                </li>
-                <li>
-                  <input type="radio" id="c7" name="category1" />
-                  <label for="c7">Home Care</label>
-                </li>
-                <li>
-                  <input type="radio" id="c8" name="category1" />
-                  <label for="c8">Noodles & Sauces</label>
-                </li>
-                <li>
-                  <input type="radio" id="c9" name="category1" />
-                  <label for="c9">Personal Care</label>
-                </li>
-                <li>
-                  <input type="radio" id="c10" name="category1" />
-                  <label for="c10">Pat Care</label>
-                </li>
-                <li>
-                  <input type="radio" id="c11" name="category1" />
-                  <label for="c11">Mea & Seafood</label>
-                </li>
-                <li>
-                  <input type="radio" id="c12" name="category1" />
-                  <label for="c12">Electronics</label>
-                </li>
+                {categories.map((data) => (
+                  <li>
+                    <input
+                      type="radio"
+                      id={`filterCategory-${data.id}`}
+                      name="category1"
+                      checked
+                    />
+                    <label for="c2">{transformTextUppercase(data.name)}</label>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

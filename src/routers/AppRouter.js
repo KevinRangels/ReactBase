@@ -6,7 +6,8 @@ import { LoginScreen } from "../pages/Auth/LoginScreen";
 import { RegisterScreen } from "../pages/Auth/RegisterScreen";
 import { ForgotPassword } from "../pages/Auth/ForgotPassword";
 import ScrollToTop from "./helpers/ScrollToTop";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const AppRouter = () => {
   return (
     <Router>
@@ -20,6 +21,7 @@ export const AppRouter = () => {
           <Route path="/" component={PublicRoute} />
         </Switch>
       </div>
+      <ToastContainer />
     </Router>
   );
 };
