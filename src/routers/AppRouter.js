@@ -8,7 +8,15 @@ import { ForgotPassword } from "../pages/Auth/ForgotPassword";
 import ScrollToTop from "./helpers/ScrollToTop";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { getCartLocal } from "../actions/car";
+import { UpdatedPassword } from "../pages/Auth/UpdatedPassword";
 export const AppRouter = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCartLocal());
+  }, []);
   return (
     <Router>
       <ScrollToTop />
@@ -17,6 +25,7 @@ export const AppRouter = () => {
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
           <Route path="/forgot-password" component={ForgotPassword} />
+          <Route path="/updated-password" component={UpdatedPassword} />
           <Route path="/user" component={PrivateRoute} />
           <Route path="/" component={PublicRoute} />
         </Switch>

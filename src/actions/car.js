@@ -33,6 +33,12 @@ export const addProductToCar = (product) => {
   };
 };
 
+export const addItemProduct = (product) => {
+  return async (dispatch, getState) => {
+    const { products } = getState().car;
+  };
+};
+
 export const handleDeleteItem = (product) => {
   return async (dispatch, getState) => {
     const { products } = getState().car;
@@ -55,6 +61,13 @@ export const handleDeleteItem = (product) => {
       progress: undefined,
       transition: Slide,
     });
+  };
+};
+
+export const getCartLocal = () => {
+  return async (dispatch) => {
+    let products = JSON.parse(localStorage.getItem("car"));
+    dispatch(handleAddProduct(products));
   };
 };
 

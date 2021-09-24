@@ -32,8 +32,8 @@ export const ProductCard = ({ data }) => {
     }
   };
 
-  const handleViewProduct = () => {
-    history.push("/producto");
+  const handleViewProduct = (id) => {
+    history.push(`/producto/${id}`);
   };
 
   const handleAddWishlist = () => {
@@ -58,24 +58,24 @@ export const ProductCard = ({ data }) => {
       name: product.name,
       cost: product.cost,
       quantity: quantity,
-      image: product.image,
+      image: product.image[0],
       total: product.cost * quantity,
     };
 
-    let foo = addProductValidation(objProduct, products);
+    let newProducts = addProductValidation(objProduct, products);
 
-    console.log("foo", foo);
+    console.log("foo", newProducts);
 
-    dispatch(addProductToCar(foo));
+    dispatch(addProductToCar(newProducts));
   };
 
   return (
     <div class="product-item">
       <div class="product-img">
         <img
-          src={`${process.env.REACT_APP_URL_BASE}/images/products/${data.image[0]}`}
-          alt={data.name}
-          onClick={handleViewProduct}
+          src={`${process.env.REACT_APP_URL_BASE}/images/products/${data?.image[0]}`}
+          alt={data?.name}
+          onClick={() => handleViewProduct(data.id)}
         />
         <div class="product-absolute-options">
           <span class="offer-badge-1">Nuevo</span>
@@ -90,7 +90,7 @@ export const ProductCard = ({ data }) => {
         <p>
           Disponibles<span>(En Stock)</span>
         </p>
-        <h4>{data.name}</h4>
+        <h4>{data?.name}</h4>
         <div class="product-price">${transformTextCurrency(data.cost)}</div>
         {/* <div class="product-price">
           ${data.cost} <span>$15</span>

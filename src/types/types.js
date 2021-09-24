@@ -8,6 +8,12 @@ export const types = {
   carDeleteProduct: "[Car] Delete Product",
   carUpdateProducts: "[Car] Update Product",
 
+  payAddAddress: "[Pay] Add Address",
+
+  getAllAddress: "[Pay] Get All Address",
+  updatedAddress: "[Pay] Updated Address",
+  deleteAddress: "[Pay] Delete Address",
+
   uiSetError: "[UI] Set Error",
   uiRemoveError: "[UI] Remove Error",
 

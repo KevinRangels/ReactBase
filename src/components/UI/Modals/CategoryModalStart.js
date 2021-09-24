@@ -9,8 +9,8 @@ export const CategoryModalStart = () => {
 
   const { categories } = useSelector((state) => state.general);
 
-  const handleSelectCategory = (route) => {
-    history.push(`/shop`);
+  const handleSelectCategory = (data) => {
+    history.push(`/shop?category=${data.id}`);
     document.getElementById("btnCategory_model").click();
   };
 
@@ -42,12 +42,15 @@ export const CategoryModalStart = () => {
             <ul class="category-by-cat">
               {categories.map((data) => (
                 <li>
-                  <Link to="/shop" class="single-cat-item">
+                  <button
+                    onClick={() => handleSelectCategory(data)}
+                    class="single-cat-item"
+                  >
                     <div class="icon">
                       <img src="assets/images/category/icon-9.svg" alt="" />
                     </div>
                     <div class="text"> {transformTextUppercase(data.name)}</div>
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>

@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import { authReducer } from "../reducers/authReducer";
 import { carReducer } from "../reducers/carReducer";
 import { generalReducer } from "../reducers/generalReducer";
+import { payReducer } from "../reducers/payReducer";
 import { uiReducer } from "../reducers/uiReducer";
 
 const composeEnhancers =
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   ui: uiReducer,
   general: generalReducer,
   car: carReducer,
+  pay: payReducer,
 });
 
 export const store = createStore(

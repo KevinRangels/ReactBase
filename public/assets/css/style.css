@@ -1080,6 +1080,9 @@ i.icon1 {
   text-align: center;
   padding: 20px 10px;
   display: block;
+  width: 100%;
+  background: none;
+  border: none;
 }
 
 .single-cat-item:hover {
@@ -1343,6 +1346,7 @@ i.icon1 {
   color: #fff;
   background: #f55d2c;
   font-weight: 500;
+  border: none;
 }
 
 .cart-item {
@@ -3308,7 +3312,7 @@ label.control-label {
   font-size: 14px;
   position: relative;
   margin-top: 0;
-  display: none;
+  /* display: none; */
   margin-bottom: 25px !important;
 }
 

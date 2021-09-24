@@ -26,7 +26,7 @@ export const PublicRoute = () => {
           <Route path="/shop" component={ShopScreen} />
           <Route path="/faq" component={FaqScreen} />
           <Route path="/contact-us" component={ContactUsScreen} />
-          <Route path="/producto" component={ProductScreen} />
+          <Route path="/producto/:id" component={ProductScreen} />
           <Route path="/checkout" component={CheckoutScreen} />
           <Route path="/offers" component={OffersScreen} />
           <Route path="/" component={HomeScreen} />

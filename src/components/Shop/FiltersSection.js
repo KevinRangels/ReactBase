@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { transformTextUppercase } from "../../helpers/transformText";
+import axios from "../../axios";
 
 export const FiltersSection = () => {
   const { categories } = useSelector((state) => state.general);
+  const [brands, setBrands] = useState([]);
+
+  const handleGetBrands = async () => {
+    let res = await axios.get("/get-brands");
+    let { data } = res;
+    setBrands(data);
+  };
+
+  useEffect(() => {
+    handleGetBrands();
+  }, []);
 
   return (
     <div className="bs-canvas bs-canvas-right position-fixed bg-cart h-100">
@@ -62,106 +74,21 @@ export const FiltersSection = () => {
                   </div>
                 </div>
               </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_1"
-                />
-                <label className="custom-control-label" for="brand_1">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_2"
-                />
-                <label className="custom-control-label" for="brand_2">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_3"
-                />
-                <label className="custom-control-label" for="brand_3">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_4"
-                />
-                <label className="custom-control-label" for="brand_4">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_5"
-                />
-                <label className="custom-control-label" for="brand_5">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_6"
-                />
-                <label className="custom-control-label" for="brand_6">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_7"
-                />
-                <label className="custom-control-label" for="brand_7">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_8"
-                />
-                <label className="custom-control-label" for="brand_8">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_9"
-                />
-                <label className="custom-control-label" for="brand_9">
-                  Brand Name
-                </label>
-              </div>
-              <div className="custom-control custom-checkbox pb2">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="brand_10"
-                />
-                <label className="custom-control-label" for="brand_10">
-                  Brand Name
-                </label>
-              </div>
+              {categories.map((data) => (
+                <div className="custom-control custom-checkbox pb2">
+                  <input
+                    type="checkbox"
+                    className="custom-control-input"
+                    id={`brandFilter_${data.id}`}
+                  />
+                  <label
+                    className="custom-control-label"
+                    htmlFor={`brandFilter_${data.id}`}
+                  >
+                    {transformTextUppercase(data.name)}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
         </div>

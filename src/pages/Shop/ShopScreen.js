@@ -1,10 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FiltersSection } from "../../components/Shop/FiltersSection";
 import { Breadcrumb } from "../../components/UI/Breadcrumb";
 import { ProductCard } from "../../components/UI/ProductCard";
+import queryString from "query-string";
+import { useSelector } from "react-redux";
+import { transformTextUppercase } from "../../helpers/transformText";
 
 export const ShopScreen = () => {
+  const location = useLocation();
+  const { categories } = useSelector((state) => state.general);
   const [viewFilters, setViewFilters] = useState(false);
+  const [categorySelected, setCategorySelected] = useState(null);
+  let query = queryString.parse(location.search);
+
+  const findCategory = () => {
+    let category = categories.find((e) => e.id === parseInt(query.category));
+    setCategorySelected(category);
+  };
+
+  useEffect(() => {
+    findCategory();
+  }, [categories, location]);
 
   return (
     <>
@@ -15,7 +32,9 @@ export const ShopScreen = () => {
             <div class="col-lg-12">
               <div class="product-top-dt">
                 <div class="product-left-title">
-                  <h2>Vegetables & Fruits</h2>
+                  {categorySelected && (
+                    <h2>{transformTextUppercase(categorySelected?.name)}</h2>
+                  )}
                 </div>
                 <a href="#" class="filter-btn pull-bs-canvas-right">
                   Filtros
@@ -53,9 +72,6 @@ export const ShopScreen = () => {
                         <div class="item" data-value="4">
                           Ahorro - Alto a Bajo
                         </div>
-                        <div class="item" data-value="5">
-                          Ahorro - Bajo a Alto
-                        </div>
                         <div class="item" data-value="6">
                           Ahorro - Bajo a Alto
                         </div>
@@ -68,7 +84,7 @@ export const ShopScreen = () => {
           </div>
           <div class="product-list-view">
             <div class="row">
-              <div class="col-lg-3 col-md-6 mb-4">
+              {/* <div class="col-lg-3 col-md-6 mb-4">
                 <ProductCard />
               </div>
               <div class="col-lg-3 col-md-6 mb-4">
@@ -103,7 +119,7 @@ export const ShopScreen = () => {
               </div>
               <div class="col-lg-3 col-md-6 mb-4">
                 <ProductCard />
-              </div>
+              </div> */}
               <div class="col-md-12">
                 <div class="more-product-btn">
                   <button

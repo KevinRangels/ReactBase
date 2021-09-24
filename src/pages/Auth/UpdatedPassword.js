@@ -3,14 +3,19 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+
 const schema = yup.object().shape({
-  email: yup
+  password: yup
     .string()
     .required("Campo requerido")
-    .email("Correo electrónico inválido"),
-});
+    .min(8, "Debe tener mínimo 8 caracteres"),
 
-export const ForgotPassword = () => {
+  password_confirm: yup
+    .string()
+    .required("Campo requerido")
+    .oneOf([yup.ref("password"), null], "Las contraseñas no coinciden"),
+});
+export const UpdatedPassword = () => {
   const {
     register,
     handleSubmit,
@@ -23,7 +28,6 @@ export const ForgotPassword = () => {
   const onSubmit = (data) => {
     console.log("form recover password", data);
   };
-
   return (
     <div class="sign-inup">
       <div class="container">
@@ -47,24 +51,38 @@ export const ForgotPassword = () => {
                   <div class="form-inpts checout-address-step">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div class="form-title">
-                        <h6>Recuperar contraseña</h6>
+                        <h6>Establecer contraseña</h6>
                       </div>
                       <div class="form-group pos_rel">
                         <input
-                          id="email[address]"
-                          name="email"
-                          type="email"
-                          placeholder="Correo electrónico"
+                          id="password[old]"
+                          name="password"
+                          type="password"
+                          placeholder="Contraseña"
                           class="form-control lgn_input"
-                          {...register("email")}
+                          {...register("password")}
                         />
-                        <i class="uil uil-envelope lgn_icon"></i>
+                        <i class="uil uil-padlock lgn_icon"></i>
                       </div>
                       <p className="validationMessage">
-                        {errors["email"]?.message}
+                        {errors["password"]?.message}
+                      </p>
+                      <div class="form-group pos_rel">
+                        <input
+                          id="password[new]"
+                          name="password_confirm"
+                          type="password"
+                          placeholder="Confirmar constraseña"
+                          class="form-control lgn_input"
+                          {...register("password_confirm")}
+                        />
+                        <i class="uil uil-padlock lgn_icon"></i>
+                      </div>
+                      <p className="validationMessage">
+                        {errors["password_confirm"]?.message}
                       </p>
                       <button class="login-btn hover-btn" type="submit">
-                        Enviar
+                        Guardar
                       </button>
                     </form>
                   </div>

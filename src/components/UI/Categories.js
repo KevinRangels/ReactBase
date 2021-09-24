@@ -44,7 +44,10 @@ export const Categories = () => {
               >
                 {categories.map((data) => (
                   <div class="item" key={data.id}>
-                    <Link to="/shop" class="category-item">
+                    <Link
+                      to={`/shop?category=${data.id}`}
+                      class="category-item"
+                    >
                       <div class="cate-img">
                         <img src="assets/images/category/icon-1.svg" alt="" />
                       </div>

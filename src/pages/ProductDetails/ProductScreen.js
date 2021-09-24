@@ -1,8 +1,85 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "../../axios";
+import { toast, Slide } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 import { TopFeaturedProducts } from "../../components/Home/TopFeaturedProducts";
 import { Breadcrumb } from "../../components/UI/Breadcrumb";
+import { transformTextCurrency } from "../../helpers/transformText";
+import { addProductValidation } from "../../helpers/shoppingCar";
+import { addProductToCar } from "../../actions/car";
+import { ProductGallery } from "../../components/ProductGallery";
 
 export const ProductScreen = () => {
+  let { id } = useParams();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { products } = useSelector((state) => state.car);
+
+  const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+
+  const handleGetProduct = async () => {
+    let res = await axios.get(`products/details/${id}`);
+    let { data } = res;
+    setProduct(data);
+    console.log("product details", data);
+  };
+
+  useEffect(() => {
+    handleGetProduct();
+  }, []);
+
+  const handleAddWishlist = () => {
+    if (!user) {
+      toast("Debes iniciar sesión", {
+        position: "bottom-center",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        transition: Slide,
+      });
+      return false;
+    }
+  };
+
+  const handleQuantity = (opt) => {
+    if (opt === "+") {
+      let newQuantity = quantity + 1;
+      setQuantity(newQuantity);
+      return;
+    }
+    if (opt === "-") {
+      if (quantity === 1) {
+        return;
+      }
+      let newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      return;
+    }
+  };
+
+  const handleAddToCar = (data) => {
+    let { product, images } = data;
+
+    let objProduct = {
+      id: product.id,
+      name: product.name,
+      cost: product.cost,
+      quantity: quantity,
+      image: images[0],
+      total: product.cost * quantity,
+    };
+
+    let newProducts = addProductValidation(objProduct, products);
+
+    dispatch(addProductToCar(newProducts));
+  };
+
   return (
     <>
       <Breadcrumb page="Detalles producto" />
@@ -13,7 +90,8 @@ export const ProductScreen = () => {
               <div class="product-dt-view">
                 <div class="row">
                   <div class="col-lg-4 col-md-4">
-                    <div id="sync1" class="owl-carousel owl-theme">
+                    {product && <ProductGallery images={product.images} />}
+                    {/* <div id="sync1" class="owl-carousel owl-theme">
                       <div class="item">
                         <img src="assets/images/product/big-1.jpg" alt="" />
                       </div>
@@ -40,11 +118,11 @@ export const ProductScreen = () => {
                       <div class="item">
                         <img src="assets/images/product/big-4.jpg" alt="" />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div class="col-lg-8 col-md-8">
                     <div class="product-dt-right">
-                      <h2>Grape Fruit Turkey</h2>
+                      <h2>{product?.product?.name}</h2>
                       <div class="no-stock">
                         <p class="pd-no">
                           Producto Nro.<span>12345</span>
@@ -84,14 +162,24 @@ export const ProductScreen = () => {
                       </p>
                       <div class="product-group-dt">
                         <ul>
-                          <li>
+                          {/* <li>
                             <div class="main-price color-discount">
                               Discount Price<span>$15</span>
                             </div>
-                          </li>
+                          </li> */}
                           <li>
-                            <div class="main-price mrp-price">
-                              MRP Price<span>$18</span>
+                            <div class="main-price ">
+                              Precio
+                              <span>
+                                {product && (
+                                  <>
+                                    $
+                                    {transformTextCurrency(
+                                      product?.product?.cost
+                                    )}
+                                  </>
+                                )}
+                              </span>
                             </div>
                           </li>
                         </ul>
@@ -102,25 +190,28 @@ export const ProductScreen = () => {
                                 <input
                                   type="button"
                                   value="-"
-                                  class="minus minus-btn"
+                                  class="minus"
+                                  onClick={() => handleQuantity("-")}
                                 />
                                 <input
                                   type="number"
-                                  step="1"
+                                  // step="1"
                                   name="quantity"
-                                  value="1"
+                                  value={quantity}
                                   class="input-text qty text"
                                 />
                                 <input
                                   type="button"
                                   value="+"
-                                  class="plus plus-btn"
+                                  class="plus"
+                                  onClick={() => handleQuantity("+")}
                                 />
                               </div>
                             </div>
                           </li>
                           <li>
                             <span
+                              onClick={() => handleAddWishlist()}
                               class="like-icon save-icon"
                               title="wishlist"
                             ></span>
@@ -128,7 +219,10 @@ export const ProductScreen = () => {
                         </ul>
                         <ul class="ordr-crt-share">
                           <li>
-                            <button class="add-cart-btn hover-btn">
+                            <button
+                              class="add-cart-btn hover-btn"
+                              onClick={() => handleAddToCar(product)}
+                            >
                               <i class="uil uil-shopping-cart-alt"></i>Agregar
                               al carrito
                             </button>

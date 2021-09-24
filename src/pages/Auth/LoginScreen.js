@@ -1,7 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Campo requerido")
+    .email("Correo electrónico inválido"),
+  password: yup
+    .string()
+    .required("Campo requerido")
+    .min(8, "Debe tener mínimo 8 caracteres"),
+});
 
 export const LoginScreen = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    let request = {
+      email: data.email,
+      password: data.password,
+    };
+    reset({ password: "" });
+  };
+
   return (
     <div className="sign-inup">
       <div className="container">
@@ -23,32 +54,38 @@ export const LoginScreen = () => {
                 </div>
                 <div className="form-dt">
                   <div className="form-inpts checout-address-step">
-                    <form>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="form-title">
                         <h6>Iniciar sesión</h6>
                       </div>
-                      <div className="form-group pos_rel">
+                      <div className="form-group pos_rel ">
                         <input
                           id="phone[number]"
-                          name="phone"
+                          name="email"
                           type="text"
                           placeholder="Correo electrónico"
                           className="form-control lgn_input"
-                          required=""
+                          {...register("email")}
                         />
                         <i className="uil uil-envelope lgn_icon"></i>
                       </div>
-                      <div className="form-group pos_rel">
+                      <p className="validationMessage">
+                        {errors["email"]?.message}
+                      </p>
+                      <div className="form-group pos_rel ">
                         <input
-                          id="password1"
-                          name="password1"
+                          id="password"
+                          name="password"
                           type="password"
                           placeholder="Contraseña"
                           className="form-control lgn_input"
-                          required=""
+                          {...register("password")}
                         />
                         <i className="uil uil-padlock lgn_icon"></i>
                       </div>
+                      <p className="validationMessage">
+                        {errors["password"]?.message}
+                      </p>
                       <button className="login-btn hover-btn" type="submit">
                         Iniciar Sesión
                       </button>

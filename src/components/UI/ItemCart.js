@@ -1,17 +1,64 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { handleDeleteItem } from "../../actions/car";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { handleAddProduct, handleDeleteItem } from "../../actions/car";
+import {
+  addItemProductValid,
+  subtractItemProductValid,
+} from "../../helpers/shoppingCar";
 import { transformTextCurrency } from "../../helpers/transformText";
 
 export const ItemCart = ({ data }) => {
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState(data.quantity);
+  const { products } = useSelector((state) => state.car);
+
+  const handleAddItemProduct = (opt, product, products) => {
+    if (opt === "+") {
+      let res = addItemProductValid(product, products);
+      dispatch(handleAddProduct(res));
+    }
+    if (opt === "-") {
+      if (data.quantity === 1) {
+        return;
+      }
+      let res = subtractItemProductValid(product, products);
+      dispatch(handleAddProduct(res));
+    }
+  };
+
+  const handleCounter = () => {
+    return (
+      <div class="quantity buttons_added">
+        <input
+          type="button"
+          value="-"
+          class="minus"
+          onClick={() => handleAddItemProduct("-", data, products)}
+        />
+        <input
+          type="number"
+          name="quantity"
+          value={data.quantity}
+          class="input-text qty text"
+        />
+        <input
+          type="button"
+          value="+"
+          class="plus"
+          onClick={() => handleAddItemProduct("+", data, products)}
+        />
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    handleCounter();
+  }, [products]);
 
   return (
     <div class="cart-item">
       <div class="cart-product-img">
         <img
-          src={`${process.env.REACT_APP_URL_BASE}/images/products/${data.image[0]}`}
+          src={`${process.env.REACT_APP_URL_BASE}/images/products/${data.image}`}
           alt={data.name}
         />
         {/* <div class="offer-badge">6% OFF</div> */}
@@ -39,17 +86,7 @@ export const ItemCart = ({ data }) => {
           </ul>
         </div>
         <div class="qty-group">
-          <div class="quantity buttons_added">
-            <input type="button" value="-" class="minus minus-btn" />
-            <input
-              type="number"
-              step="1"
-              name="quantity"
-              value={quantity}
-              class="input-text qty text"
-            />
-            <input type="button" value="+" class="plus plus-btn" />
-          </div>
+          {handleCounter()}
           <div class="cart-item-price">
             ${transformTextCurrency(data.cost * data.quantity)}
           </div>
